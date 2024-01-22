@@ -4,8 +4,8 @@ on:
     branches: main
   schedule:
     # * is a special character in YAML so you have to quote this string
-    # Cada dia a les 1:14
-    - cron:  '14 1 * * *'
+    # Cada dia a les 12:14
+    - cron:  '14 12 * * *'
 
 name: Render and Publish
 
@@ -27,14 +27,14 @@ jobs:
         with:
           extra-packages: local::.
 
-      - name: Crea i omple .Renviron amb secrets accessibles des d'R
-        run: |
-          echo R_TELEGRAM_BOT_monitorOSM_bot="$R_TELEGRAM_BOT_MONITOROSM_BOT" >> ~/.Renviron
-          echo TME_OSMCAT_CHATID="$TME_OSMCAT_CHATID" >> ~/.Renviron
-        shell: bash
-        env:
-          R_TELEGRAM_BOT_MONITOROSM_BOT: ${{ secrets.R_TELEGRAM_BOT_MONITOROSM_BOT }}
-          TME_OSMCAT_CHATID: ${{ secrets.TME_OSMCAT_CHATID}}
+      # - name: Crea i omple .Renviron amb secrets accessibles des d'R
+      #   run: |
+      #     echo R_TELEGRAM_BOT_monitorOSM_bot="$R_TELEGRAM_BOT_MONITOROSM_BOT" >> ~/.Renviron
+      #     echo TME_OSMCAT_CHATID="$TME_OSMCAT_CHATID" >> ~/.Renviron
+      #   shell: bash
+      #   env:
+      #     R_TELEGRAM_BOT_MONITOROSM_BOT: ${{ secrets.R_TELEGRAM_BOT_MONITOROSM_BOT }}
+      #     TME_OSMCAT_CHATID: ${{ secrets.TME_OSMCAT_CHATID}}
 
 
       - name: Publish to GitHub Pages (and render)
