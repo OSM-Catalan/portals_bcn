@@ -1,0 +1,97 @@
+---
+title: "Progrés adreces Barcelona"
+echo: false
+warning: false
+
+---
+
+```{r}
+#| output: false
+
+library(osmdata)
+library(sf)
+options(scipen = "999")
+sysfonts::font_add_google("Nunito Sans", "nunito sans")
+showtext::showtext_auto()
+
+bcn <- read.csv("https://raw.githubusercontent.com/OSM-Catalan/portals_bcn/main/data_raw/bcn_portals2023.csv",encoding = "UTF-8")
+
+# ajuntar districtes i barris
+
+barris <- getbb("Barcelona",format_out = "osm_type_id") |>
+  opq() |>
+  add_osm_feature("admin_level", "10") |>
+  osmdata_sf()
+
+barris <- barris$osm_multipolygons
+
+bcn_sf <- st_as_sf(bcn, coords = c("X", "Y"), crs = "EPSG:4326")
+
+bcn_barris <- st_join(bcn_sf, st_make_valid(barris[,"name"]))
+
+
+portals_barri <- as.data.frame(tapply(bcn_barris$name, bcn_barris$name, length))
+colnames(portals_barri) <- "portals"
+portals_barri$name <- row.names(portals_barri)
+
+portals_barri <- portals_barri[,c("name", "portals")]
+row.names(portals_barri) <- NULL
+
+barris <- merge(barris[,"name"], portals_barri, by = "name")
+
+
+```
+
+```{r}
+download_ads <- function(){
+  ads <- osmdata::getbb("Barcelona",format_out = "osm_type_id") |>
+    osmdata::opq() |>
+    osmdata::add_osm_features('["addr:housenumber"]["addr:street"]') |>
+    osmdata::osmdata_sf()
+  ads <- rbind(ads$osm_points[,c("addr:housenumber",
+                                 "addr:street")],
+               sf::st_centroid(sf::st_make_valid(ads$osm_polygons))[,c("addr:housenumber",
+                                                    "addr:street")],
+               sf::st_centroid(sf::st_make_valid(ads$osm_multipolygons))[,c("addr:housenumber",
+                                                         "addr:street")])
+  ads <- ads[!is.na(ads$`addr:housenumber`) & !is.na(ads$`addr:street`),]
+  return(ads)
+}
+
+ads <- download_ads()
+```
+
+```{r}
+print(c("Número de portals a Barcelona" = as.integer(sum(barris$portals)),
+      "Número de portals a OSM" = as.integer(nrow(ads)),
+      "Percentatge de portals a OSM" = scales::percent(nrow(ads)/sum(barris$portals), .01)))
+```
+
+
+```{r}
+#| position-hold: true
+
+osmads <- sf::st_join(ads, barris[,"name"]) |>
+	  sf::st_drop_geometry()
+
+osmads <- as.data.frame(table(osmads$name))	
+colnames(osmads) <- c("name", "portals_osm")
+barris <- merge(barris, osmads, by = "name")
+barris$pct <- barris$portals_osm/barris$portals
+barris$pct <- ifelse(barris$pct > 1, 1, barris$pct)
+
+plot(barris[c("portals", "portals_osm")],
+     nbreaks = 10,
+     main = "NÚMERO DE PORTALS PER BARRI (CARTOBCN i OSM)",
+     pal = viridisLite::viridis(10),
+     key.pos = 1,
+     family = "nunito sans")
+
+plot(barris["pct"],
+     breaks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9, .999, 1.1),
+     main = "PERCENTATGE DE PORTALS CARTOBCN A OSM PER BARRI",
+     pal = viridisLite::viridis(11),
+     key.pos = 1,
+     family = "nunito sans")
+```
+

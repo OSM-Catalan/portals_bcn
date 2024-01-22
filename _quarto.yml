@@ -1,0 +1,24 @@
+project:
+  type: website
+  execute-dir: project
+  render:
+    - README.Rmd
+    - data-raw/README.md
+    - web/*.qmd
+
+website:
+  title: "portals_bcn"
+  repo-url: https://github.com/OSM-Catalan/portals_bcn
+  repo-actions: [edit, issue]
+  site-url: https://osm-catalan.github.io/monitorOSM
+  open-graph: true
+
+format:
+  html:
+    theme: lux
+    css: styles.css
+    toc: true
+    lang: ca
+    language: _language-ca.yml # TODO: elimina. Pendent de https://github.com/quarto-dev/quarto-cli/pull/5968
+
+editor: source
