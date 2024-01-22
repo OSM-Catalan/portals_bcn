@@ -1,0 +1,1 @@
+Sitemap: https://osm-catalan.github.io/portals_bcn/sitemap.xml
