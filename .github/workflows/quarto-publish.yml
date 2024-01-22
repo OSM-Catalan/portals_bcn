@@ -27,7 +27,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: sf, osmdata, sysfonts, showtext
+          packages: sf, osmdata, sysfonts, showtext
 
       # - name: Crea i omple .Renviron amb secrets accessibles des d'R
       #   run: |
