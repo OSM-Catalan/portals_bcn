@@ -26,8 +26,8 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        # with:
-        #   extra-packages: local::.
+        with:
+          extra-packages: sf, osmdata, sysfonts, showtext
 
       # - name: Crea i omple .Renviron amb secrets accessibles des d'R
       #   run: |
