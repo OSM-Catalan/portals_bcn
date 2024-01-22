@@ -10,7 +10,7 @@ website:
   title: "portals_bcn"
   repo-url: https://github.com/OSM-Catalan/portals_bcn
   repo-actions: [edit, issue]
-  site-url: https://osm-catalan.github.io/monitorOSM
+  site-url: https://osm-catalan.github.io/portals_bcn
   open-graph: true
 
 format:

@@ -8,12 +8,12 @@ on:
     - cron:  '14 12 * * *'
 
 name: Render and Publish
-
+permissions:
+    contents: write
+    pages: write
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -26,8 +26,8 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: local::.
+        # with:
+        #   extra-packages: local::.
 
       # - name: Crea i omple .Renviron amb secrets accessibles des d'R
       #   run: |
