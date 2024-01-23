@@ -4,8 +4,8 @@ on:
     branches: main
   schedule:
     # * is a special character in YAML so you have to quote this string
-    # Cada dia a les 13:00
-    - cron:  '00 13 * * *'
+    # Cada dia a les 00:00
+    - cron:  '0 0 * * *'
 
 name: Render and Publish
 permissions:
