@@ -83,7 +83,7 @@ barris$pct <- ifelse(barris$pct > 1, 1, barris$pct)
 plot(barris[c("portals", "portals_osm")],
      nbreaks = 10,
      main = "NÚMERO DE PORTALS PER BARRI (CARTOBCN i OSM)",
-     pal = viridisLite::viridis(10),
+     pal = viridisLite::viridis(9),
      key.pos = 1,
      family = "nunito sans")
 
